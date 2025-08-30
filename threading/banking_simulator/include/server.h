@@ -1,6 +1,8 @@
 #pragma once
 
 #include "./shared.h"
+#include "./request.h"
+#include "./response.h"
 #include "./socket.h"
 
 #define BUFFER_SIZE 4028

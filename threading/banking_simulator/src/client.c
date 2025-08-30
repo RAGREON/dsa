@@ -29,7 +29,36 @@ int send_message(Socket* server_socket, const void* data, size_t length) {
   return bytes_sent;
 }
 
+Response recv_response(Socket* server_socket) {
+  Response response;
+
+  int bytes = recv(server_socket->descriptor, (char*)&response, sizeof(response), 0); 
+
+  if (bytes == SOCKET_ERROR) {
+    WSA_ERROR("no response");
+  }
+
+  return response;
+}
+
 int send_credentials(Socket* server_socket, Credentials* credentials) {
   int bytes = send_message(server_socket, credentials, sizeof(*credentials));
   return bytes;
+}
+
+int send_request(Socket* server_socket, Request* request) {
+  int bytes_sent = socket_send_message(server_socket, request, sizeof(*request));
+
+  if (bytes_sent < 0) {
+    printf("failed to send reqeust\n");
+  }
+
+  size_t response_size;
+
+  Response* response = (Response*)socket_recv_message(server_socket, &response_size);
+
+  printf("response:\n");
+  printf("status code: %d\n", response->status_code);
+
+  return 1;
 }

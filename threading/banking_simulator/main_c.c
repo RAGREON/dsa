@@ -7,23 +7,11 @@ int main(int argc, char** argv) {
 
   client_connect(server_socket);
 
-  char username[50];
-  char password[50];
+  printf("sending request...\n");
 
-  printf("enter username: ");
-  scanf("%s", username);
+  Request request = { GET };
 
-  printf("enter password: ");
-  scanf("%s", password);
-
-  printf("\nsending credentials to the server...");
- 
-  Credentials credentials;
-
-  strcpy(credentials.username, username);
-  strcpy(credentials.password, password);
-
-  send_credentials(server_socket, &credentials);
+  send_request(server_socket, &request);
  
   return 0;
 }

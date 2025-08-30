@@ -59,25 +59,18 @@ void server_listen(Server* server, int max_connection) {
 void* handle_client(void* arg) {
   Socket* client_socket = (Socket*)arg;
 
-  Credentials credentials;
-
   while (1) {
-    int bytes = recv(client_socket->descriptor, (char*)&credentials, sizeof(credentials), 0);
+    Request* request = (Request*)socket_recv_message(client_socket, NULL);
 
-    if (bytes == SOCKET_ERROR) {
-      WSA_ERROR("recv failed\n");
-      closesocket(client_socket->descriptor);
-      break;
-    }
-    else if (bytes == 0) {
-      printf("client disconnected\n");
-      closesocket(client_socket->descriptor);
-      break;
-    }
-    else {
-      printf("username: %s\n", credentials.username);
-      printf("password: %s\n", credentials.password);
-    }
+    printf("request:\n");
+    printf("request type: %d\n", request->type);
+
+    Response response = { OK };
+
+    socket_send_message(client_socket, &response, sizeof(response));
+
+    closesocket(client_socket->descriptor);
+    break;
   } 
 
   free(client_socket);

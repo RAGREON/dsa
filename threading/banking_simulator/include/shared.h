@@ -5,6 +5,8 @@
 #include <winsock2.h>
 #include <pthread.h>
 #include <string.h>
+#include "./request.h"
+#include <stdint.h>
 
 #define WSA_ERROR(error) \
   do { \
